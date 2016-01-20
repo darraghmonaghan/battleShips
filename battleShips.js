@@ -1,5 +1,9 @@
 
 var prompt = require('prompt');
+var $ = require('jquery');
+var http = require('http');
+
+
 
 var playerGrid = [['-','-','-','-','-','-','-','-','-','-'],
 					['-','-','-','-','-','-','-','-','-','-'],
@@ -13,40 +17,57 @@ var playerGrid = [['-','-','-','-','-','-','-','-','-','-'],
 					['-','-','-','-','-','-','-','-','-','-']];
 
 
-var computerGrid = [[null,null,null,null,null,null,null,null,null,null],
-                    [null,null,null,null,null,null,null,null,null,null],
-                    [null,null,null,null,null,null,null,null,null,null],
-                    [null,null,null,null,null,null,null,null,null,null],
-                    [null,null,null,null,null,null,null,null,null,null],
-                    [null,null,null,null,null,null,null,null,null,null],
-                    [null,null,null,null,null,null,null,null,null,null],
-                    [null,null,null,null,null,null,null,null,null,null],                    
-                    [null,null,null,null,null,null,null,null,null,null],
-                    [null,null,null,null,null,null,null,null,null,null]];
+var computerGrid = [['-','-','-','-','-','-','-','-','-','-'],
+					['-','-','-','-','-','-','-','-','-','-'],
+					['-','-','-','-','-','-','-','-','-','-'],
+					['-','-','-','-','-','-','-','-','-','-'],
+					['-','-','-','-','-','-','-','-','-','-'],
+					['-','-','-','-','-','-','-','-','-','-'],
+					['-','-','-','-','-','-','-','-','-','-'],
+					['-','-','-','-','-','-','-','-','-','-'],
+					['-','-','-','-','-','-','-','-','-','-'],
+					['-','-','-','-','-','-','-','-','-','-']];
 
 
-// SETTING THE COMPUTERS BOAT POSITIONING //
+///////////////////// Component 1: SETTING THE COMPUTERS BOAT POSITIONING ////////////////////////
+
+
 
 function setComputerGrid() {
 	var sizeOfShip = [4,4,5];
+	var computer = 'computer';
 	for (q = 0; q < sizeOfShip.length; q++) {		
-		horizontalOrVertical(sizeOfShip[q]);		
+		horizontalOrVertical(sizeOfShip[q], computer);		
 	}
+	console.log('computerGrid seen below:')	
 	console.log(computerGrid)
 }
 
-function horizontalOrVertical(sizeOfShip) {
+function setPlayerGrid() {
+	var sizeOfShip = [4,4,5];
+	var player = 'player';
+	for (l = 0; l < sizeOfShip.length; l++) {		
+		horizontalOrVertical(sizeOfShip[l], player);		
+	}
+	console.log('playerGrid seen below:')	
+	console.log(playerGrid)
+}
+
+
+
+function horizontalOrVertical(sizeOfShip, entity) {
 	randomNumber = Math.random();
 
 	if (randomNumber < 0.5) {
-		placeVertical(sizeOfShip);
+		placeVertical(sizeOfShip, entity);
 	} else if (randomNumber > 0.5) {
-		placeHorizontal(sizeOfShip);
+		placeHorizontal(sizeOfShip, entity);
 	}
 }
 
-function placeVertical(sizeOfShip) {								// edge cases - boats are overlapped / overwritten
+function placeVertical(sizeOfShip, entity) {								// edge cases - boats are overlapped / overwritten
 	var sizeOfShip = sizeOfShip;
+	var computerOrPlayer = entity;
 	var verticalAxis = Math.round((Math.random() * 5));
 	var horizontalAxis = Math.round((Math.random() * 9));
 
@@ -55,22 +76,38 @@ function placeVertical(sizeOfShip) {								// edge cases - boats are overlapped
 	var verticalAxis3 = (verticalAxis + 3);
 	var verticalAxis4 = (verticalAxis + 4);
 
-	if (sizeOfShip === 4) {
-		computerGrid[verticalAxis][horizontalAxis] = '4';
-		computerGrid[verticalAxis1][horizontalAxis] = '4';
-		computerGrid[verticalAxis2][horizontalAxis] = '4';
-		computerGrid[verticalAxis3][horizontalAxis] = '4';						
-	} else if (sizeOfShip === 5) {
-		computerGrid[verticalAxis][horizontalAxis] = '5';
-		computerGrid[verticalAxis1][horizontalAxis] = '5';
-		computerGrid[verticalAxis2][horizontalAxis] = '5';
-		computerGrid[verticalAxis3][horizontalAxis] = '5';				
-		computerGrid[verticalAxis4][horizontalAxis] = '5';
+	if (computerOrPlayer === 'computer') {
+			if (sizeOfShip === 4) {
+				computerGrid[verticalAxis][horizontalAxis] = '4';
+				computerGrid[verticalAxis1][horizontalAxis] = '4';
+				computerGrid[verticalAxis2][horizontalAxis] = '4';
+				computerGrid[verticalAxis3][horizontalAxis] = '4';						
+			} else if (sizeOfShip === 5) {
+				computerGrid[verticalAxis][horizontalAxis] = '5';
+				computerGrid[verticalAxis1][horizontalAxis] = '5';
+				computerGrid[verticalAxis2][horizontalAxis] = '5';
+				computerGrid[verticalAxis3][horizontalAxis] = '5';				
+				computerGrid[verticalAxis4][horizontalAxis] = '5';
+			}
+	} else if (computerOrPlayer === 'player') {
+			if (sizeOfShip === 4) {
+				playerGrid[verticalAxis][horizontalAxis] = '4';
+				playerGrid[verticalAxis1][horizontalAxis] = '4';
+				playerGrid[verticalAxis2][horizontalAxis] = '4';
+				playerGrid[verticalAxis3][horizontalAxis] = '4';						
+			} else if (sizeOfShip === 5) {
+				playerGrid[verticalAxis][horizontalAxis] = '5';
+				playerGrid[verticalAxis1][horizontalAxis] = '5';
+				playerGrid[verticalAxis2][horizontalAxis] = '5';
+				playerGrid[verticalAxis3][horizontalAxis] = '5';				
+				playerGrid[verticalAxis4][horizontalAxis] = '5';
+			}
 	}
 }
 
-function placeHorizontal(sizeOfShip) {								// edge cases - boats are overlapped / overwritten
+function placeHorizontal(sizeOfShip, entity) {								// edge cases - boats are overlapped / overwritten
 	var sizeOfShip = sizeOfShip;
+	var computerOrPlayer = entity;
 	var verticalAxis = Math.round((Math.random() * 9));
 	var horizontalAxis = Math.round((Math.random() * 5));
 
@@ -79,50 +116,58 @@ function placeHorizontal(sizeOfShip) {								// edge cases - boats are overlapp
 	var horizontalAxis3 = (horizontalAxis + 3);
 	var horizontalAxis4 = (horizontalAxis + 4);
 
-	if (sizeOfShip === 4) {
-		computerGrid[verticalAxis][horizontalAxis] = '4';
-		computerGrid[verticalAxis][horizontalAxis1] = '4';				
-		computerGrid[verticalAxis][horizontalAxis2] = '4';
-		computerGrid[verticalAxis][horizontalAxis3] = '4';
-	} else if (sizeOfShip === 5) {
-		computerGrid[verticalAxis][horizontalAxis] = '5';
-		computerGrid[verticalAxis][horizontalAxis1] = '5';
-		computerGrid[verticalAxis][horizontalAxis2] = '5';
-		computerGrid[verticalAxis][horizontalAxis3] = '5';
-		computerGrid[verticalAxis][horizontalAxis4] = '5';					
+
+	if (computerOrPlayer === 'computer') {
+		if (sizeOfShip === 4) {
+			computerGrid[verticalAxis][horizontalAxis] = '4';
+			computerGrid[verticalAxis][horizontalAxis1] = '4';				
+			computerGrid[verticalAxis][horizontalAxis2] = '4';
+			computerGrid[verticalAxis][horizontalAxis3] = '4';
+		} else if (sizeOfShip === 5) {
+			computerGrid[verticalAxis][horizontalAxis] = '5';
+			computerGrid[verticalAxis][horizontalAxis1] = '5';
+			computerGrid[verticalAxis][horizontalAxis2] = '5';
+			computerGrid[verticalAxis][horizontalAxis3] = '5';
+			computerGrid[verticalAxis][horizontalAxis4] = '5';					
+		}
+	} else if (computerOrPlayer === 'player') {
+		if (sizeOfShip === 4) {
+			playerGrid[verticalAxis][horizontalAxis] = '4';
+			playerGrid[verticalAxis][horizontalAxis1] = '4';				
+			playerGrid[verticalAxis][horizontalAxis2] = '4';
+			playerGrid[verticalAxis][horizontalAxis3] = '4';
+		} else if (sizeOfShip === 5) {
+			playerGrid[verticalAxis][horizontalAxis] = '5';
+			playerGrid[verticalAxis][horizontalAxis1] = '5';
+			playerGrid[verticalAxis][horizontalAxis2] = '5';
+			playerGrid[verticalAxis][horizontalAxis3] = '5';
+			playerGrid[verticalAxis][horizontalAxis4] = '5';					
+		}		
 	}
 }
 
 
-///////////////// SETTING THE PLAYERS BOAT POSITIONING //////////////////
 
-// macro function function setPlayerBoats(), to call other sub functions
 
-// console.log('please select where to place your first boat, and vertical or horizontal, e.g. "A4, HORIZONTAL", return window.prompt()
 
-// if (input[0] === 'A' || 'a')
-	// playerGrid[0][input[1]] = 'O'
-// else if () {
+///////////////// Component 2: SETTING THE PLAYERS BOAT POSITIONING //////////////////
 
+// function setPlayerGrid() {
+// 	userInput(4);
 // }
 
-
-function setPlayerGrid() {
-	input4SquareBoat();
-	// input4SquareBoat();
-	// input5SquareBoat();
-}
+	// struggling to trigger 3 functions in clear order;
+	// inputBoat(5);
 
 
-function input4SquareBoat() {
+function userInput(boatSize) {
   prompt.start();
   console.log('Please select the placement of your ship, input params: X-Axis = A to J (Uppercase), Y-Axis = 1 to 10, Ship Placement = "vertical" or "horizontal" (lowercase):');
   prompt.get(['XAxis', 'YAxis', 'Placement'], function (err, result) {
 
-  var boatSize = 4;
+  	////////////////////////// BUG BELOW //////////////////////////
 
-  	// BUG BELOW //
-    if (result.Placement !== ('vertical' && 'horizontal')) {										// BUG HERE - logical operator not working
+    if (result.Placement !== ('vertical' && 'horizontal')) {						// BUG HERE - logical operator not working
     	console.log('invalid entry, check spelling of "horizontal" or "vertical"');
     } else if (result.Placement === 'horizontal') {
     	placePlayerBoatHorizontal(result.XAxis, result.YAxis, boatSize);    	
@@ -132,10 +177,6 @@ function input4SquareBoat() {
   });
 }
 
-
-function input5SquareBoat() {
-
-}
 
 
 function placePlayerBoatHorizontal(XAxis, YAxis, boatSize) {
@@ -160,8 +201,14 @@ function placePlayerBoatHorizontal(XAxis, YAxis, boatSize) {
     	playerGrid[verticalAxisData][horizontalAxisData3] = 'S'; 
     	playerGrid[verticalAxisData][horizontalAxisData4] = 'S';
     }
-    console.log(playerGrid); 
 }
+
+
+function placePlayerBoatVertical(XAxis, YAxis, boatSize) {
+    var YAxisData = parseInt(YAxis);
+    var horizontalAxisData = convertLetterToInteger(XAxis);		
+}
+
 
 
 
@@ -190,18 +237,14 @@ function convertLetterToInteger(letter) {					// convert letter(A-J) to number(0
 }
 
 
-function placePlayerBoatVertical(XAxis, YAxis) {
-    var YAxisData = parseInt(YAxis);	
-}
+
 
 
 
 // CALLING THE GAME START //
 
-// setComputerGrid();
+setComputerGrid();
 setPlayerGrid();
-
-
 
 
 
