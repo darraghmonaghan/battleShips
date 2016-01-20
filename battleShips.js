@@ -139,16 +139,28 @@ function input5SquareBoat() {
 
 
 function placePlayerBoatHorizontal(XAxis, YAxis, boatSize) {
-    var YAxisData = parseInt(YAxis);						// converting it into a number
+    var verticalAxisData = parseInt(YAxis);						// converting it into a number
+    var horizontalAxisData = convertLetterToInteger(XAxis);			// converting axis letter into a number
 
-    var XAxisData = convertLetterToInteger(XAxis);
-    console.log('Converted Letter to Number here: ' + YAxisData);
-    console.log('Boat Size here: ' + boatSize);
+    var horizontalAxisData1 = (horizontalAxisData + 1);
+    var horizontalAxisData2 = (horizontalAxisData + 2);
+    var horizontalAxisData3 = (horizontalAxisData + 3);
+    var horizontalAxisData4 = (horizontalAxisData + 4);
+    var horizontalAxisData5 = (horizontalAxisData + 5);
 
-    // if (boatSize === 4) {
-
-    // } else if (boatSize === 5) {
-
+    if (boatSize === 4) {
+    	playerGrid[verticalAxisData][horizontalAxisData] = 'S';
+    	playerGrid[verticalAxisData][horizontalAxisData1] = 'S';
+    	playerGrid[verticalAxisData][horizontalAxisData2] = 'S';
+    	playerGrid[verticalAxisData][horizontalAxisData3] = 'S';    	    	    	
+    } else if (boatSize === 5) {
+    	playerGrid[verticalAxisData][horizontalAxisData] = 'S';
+    	playerGrid[verticalAxisData][horizontalAxisData1] = 'S';
+    	playerGrid[verticalAxisData][horizontalAxisData2] = 'S';
+    	playerGrid[verticalAxisData][horizontalAxisData3] = 'S'; 
+    	playerGrid[verticalAxisData][horizontalAxisData4] = 'S';
+    }
+    console.log(playerGrid); 
 }
 
 
