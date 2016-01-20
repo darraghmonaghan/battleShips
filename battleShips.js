@@ -108,17 +108,9 @@ function placeHorizontal(sizeOfShip) {								// edge cases - boats are overlapp
 
 
 function setPlayerGrid() {
-	fourSquareBoat();
-	// fourSquareBoat();
-	// fiveSquareBoat();
-}
-
-function fourSquareBoat() {
-	input4SquareBoat()
-}
-
-function fiveSquareBoat() {
-
+	input4SquareBoat();
+	// input4SquareBoat();
+	// input5SquareBoat();
 }
 
 
@@ -127,57 +119,74 @@ function input4SquareBoat() {
   console.log('Please select the placement of your ship, input params: X-Axis = A to J (Uppercase), Y-Axis = 1 to 10, Ship Placement = "vertical" or "horizontal" (lowercase):');
   prompt.get(['XAxis', 'YAxis', 'Placement'], function (err, result) {
 
-    // console.log('Command-line input received:');
-    // console.log('X - Axis: ' + result.XAxis);
-    // console.log('Y - Axis: ' + result.YAxis);
-    // console.log('Placement Direction: ' + result.Placement);
+  var boatSize = 4;
 
-    // console.log(typeof(result.XAxis));
-    // console.log(typeof(result.YAxis));
-    // console.log(typeof(result.Placement));
-
-    if (result.Placement !== ('vertical' && 'horizontal')) {
+  	// BUG BELOW //
+    if (result.Placement !== ('vertical' && 'horizontal')) {										// BUG HERE - logical operator not working
     	console.log('invalid entry, check spelling of "horizontal" or "vertical"');
     } else if (result.Placement === 'horizontal') {
-    	placePlayerBoatHorizontal(result.XAxis, result.YAxisData, result.Placement);    	
+    	placePlayerBoatHorizontal(result.XAxis, result.YAxis, boatSize);    	
     } else if (result.Placement === 'vertical') {
-    	placePlayerBoatVertical(result.XAxis, result.YAxisData, result.Placement);
+    	placePlayerBoatVertical(result.XAxis, result.YAxis, boatSize);
     }
   });
 }
 
 
-function placePlayerBoatHorizontal(XAxis, YAxis, Placement) {
-    var YAxisData = parseInt(YAxis);	
-
-    console.log(typeof(XAxis));
-    console.log(typeof(YAxisData));
-    console.log(typeof(Placement));
-
-    console.log(XAxis);
-    console.log(YAxisData);
-    console.log(Placement);
-}
-
-function placePlayerBoatVertical(XAxis, YAxis, Placement) {
-    var YAxisData = parseInt(YAxis);	
-
-    console.log(typeof(XAxis));
-    console.log(typeof(YAxisData));
-    console.log(typeof(Placement));
-
-    console.log(XAxis);
-    console.log(YAxisData);
-    console.log(Placement);
+function input5SquareBoat() {
 
 }
 
+
+function placePlayerBoatHorizontal(XAxis, YAxis, boatSize) {
+    var YAxisData = parseInt(YAxis);						// converting it into a number
+
+    var XAxisData = convertLetterToInteger(XAxis);
+    console.log('Converted Letter to Number here: ' + YAxisData);
+    console.log('Boat Size here: ' + boatSize);
+
+    // if (boatSize === 4) {
+
+    // } else if (boatSize === 5) {
+
+}
+
+
+
+function convertLetterToInteger(letter) {					// convert letter(A-J) to number(0-9) and return
+	if (letter === 'A') {
+		return 0;
+	} else if (letter === 'B') {
+		return 1;
+	} else if (letter === 'C') {
+		return 2;
+	} else if (letter === 'D') {
+		return 3;
+	} else if (letter === 'E') {
+		return 4;
+	} else if (letter === 'F') {
+		return 5;
+	} else if (letter === 'G') {
+		return 6;
+	} else if (letter === 'H') {
+		return 7;
+	} else if (letter === 'I') {
+		return 8;
+	} else if (letter === 'J') {
+		return 9;
+	}
+}
+
+
+function placePlayerBoatVertical(XAxis, YAxis) {
+    var YAxisData = parseInt(YAxis);	
+}
 
 
 
 // CALLING THE GAME START //
 
-setComputerGrid();
+// setComputerGrid();
 setPlayerGrid();
 
 
