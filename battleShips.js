@@ -1,32 +1,43 @@
 
 var prompt = require('prompt');
-var $ = require('jquery');
-var http = require('http');
 
 
+var playerGrid = [['-','A','B','C','D','E','F','G','H','I','J','K'],
+					['1','-','-','-','-','-','-','-','-','-','-','-'],
+					['2','-','-','-','-','-','-','-','-','-','-','-'],
+					['3','-','-','-','-','-','-','-','-','-','-','-'],
+					['4','-','-','-','-','-','-','-','-','-','-','-'],
+					['5','-','-','-','-','-','-','-','-','-','-','-'],
+					['6','-','-','-','-','-','-','-','-','-','-','-'],
+					['7','-','-','-','-','-','-','-','-','-','-','-'],
+					['8','-','-','-','-','-','-','-','-','-','-','-'],
+					['9','-','-','-','-','-','-','-','-','-','-','-'],
+					['10','-','-','-','-','-','-','-','-','-','-','-']];
 
-var playerGrid = [['-','-','-','-','-','-','-','-','-','-'],
-					['-','-','-','-','-','-','-','-','-','-'],
-					['-','-','-','-','-','-','-','-','-','-'],
-					['-','-','-','-','-','-','-','-','-','-'],
-					['-','-','-','-','-','-','-','-','-','-'],
-					['-','-','-','-','-','-','-','-','-','-'],
-					['-','-','-','-','-','-','-','-','-','-'],
-					['-','-','-','-','-','-','-','-','-','-'],
-					['-','-','-','-','-','-','-','-','-','-'],
-					['-','-','-','-','-','-','-','-','-','-']];
+var playerFired = [['-','A','B','C','D','E','F','G','H','I','J','K'],
+					['1','-','-','-','-','-','-','-','-','-','-','-'],
+					['2','-','-','-','-','-','-','-','-','-','-','-'],
+					['3','-','-','-','-','-','-','-','-','-','-','-'],
+					['4','-','-','-','-','-','-','-','-','-','-','-'],
+					['5','-','-','-','-','-','-','-','-','-','-','-'],
+					['6','-','-','-','-','-','-','-','-','-','-','-'],
+					['7','-','-','-','-','-','-','-','-','-','-','-'],
+					['8','-','-','-','-','-','-','-','-','-','-','-'],
+					['9','-','-','-','-','-','-','-','-','-','-','-'],
+					['10','-','-','-','-','-','-','-','-','-','-','-']];
 
 
-var computerGrid = [['-','-','-','-','-','-','-','-','-','-'],
-					['-','-','-','-','-','-','-','-','-','-'],
-					['-','-','-','-','-','-','-','-','-','-'],
-					['-','-','-','-','-','-','-','-','-','-'],
-					['-','-','-','-','-','-','-','-','-','-'],
-					['-','-','-','-','-','-','-','-','-','-'],
-					['-','-','-','-','-','-','-','-','-','-'],
-					['-','-','-','-','-','-','-','-','-','-'],
-					['-','-','-','-','-','-','-','-','-','-'],
-					['-','-','-','-','-','-','-','-','-','-']];
+var computerGrid = [['-','A','B','C','D','E','F','G','H','I','J','K'],
+					['1','-','-','-','-','-','-','-','-','-','-','-'],
+					['2','-','-','-','-','-','-','-','-','-','-','-'],
+					['3','-','-','-','-','-','-','-','-','-','-','-'],
+					['4','-','-','-','-','-','-','-','-','-','-','-'],
+					['5','-','-','-','-','-','-','-','-','-','-','-'],
+					['6','-','-','-','-','-','-','-','-','-','-','-'],
+					['7','-','-','-','-','-','-','-','-','-','-','-'],
+					['8','-','-','-','-','-','-','-','-','-','-','-'],
+					['9','-','-','-','-','-','-','-','-','-','-','-'],
+					['10','-','-','-','-','-','-','-','-','-','-','-']];
 
 
 ///////////////////// Component 1: SETTING THE COMPUTERS BOAT POSITIONING ////////////////////////
@@ -68,8 +79,8 @@ function horizontalOrVertical(sizeOfShip, entity) {
 function placeVertical(sizeOfShip, entity) {								// edge cases - boats are overlapped / overwritten
 	var sizeOfShip = sizeOfShip;
 	var computerOrPlayer = entity;
-	var verticalAxis = Math.round((Math.random() * 5));
-	var horizontalAxis = Math.round((Math.random() * 9));
+	var verticalAxis = Math.round((Math.random() * 5) + 1);				// plus one to ensure the A-J or 1-10 labels
+	var horizontalAxis = Math.round((Math.random() * 9) + 1);			// plus one to ensure the A-J or 1-10 labels
 
 	var verticalAxis1 = (verticalAxis + 1);
 	var verticalAxis2 = (verticalAxis + 2);
@@ -78,29 +89,29 @@ function placeVertical(sizeOfShip, entity) {								// edge cases - boats are ov
 
 	if (computerOrPlayer === 'computer') {
 			if (sizeOfShip === 4) {
-				computerGrid[verticalAxis][horizontalAxis] = '4';
-				computerGrid[verticalAxis1][horizontalAxis] = '4';
-				computerGrid[verticalAxis2][horizontalAxis] = '4';
-				computerGrid[verticalAxis3][horizontalAxis] = '4';						
+				computerGrid[verticalAxis][horizontalAxis] = '';
+				computerGrid[verticalAxis1][horizontalAxis] = '';
+				computerGrid[verticalAxis2][horizontalAxis] = '';
+				computerGrid[verticalAxis3][horizontalAxis] = '';						
 			} else if (sizeOfShip === 5) {
-				computerGrid[verticalAxis][horizontalAxis] = '5';
-				computerGrid[verticalAxis1][horizontalAxis] = '5';
-				computerGrid[verticalAxis2][horizontalAxis] = '5';
-				computerGrid[verticalAxis3][horizontalAxis] = '5';				
-				computerGrid[verticalAxis4][horizontalAxis] = '5';
+				computerGrid[verticalAxis][horizontalAxis] = '';
+				computerGrid[verticalAxis1][horizontalAxis] = '';
+				computerGrid[verticalAxis2][horizontalAxis] = '';
+				computerGrid[verticalAxis3][horizontalAxis] = '';				
+				computerGrid[verticalAxis4][horizontalAxis] = '';
 			}
 	} else if (computerOrPlayer === 'player') {
 			if (sizeOfShip === 4) {
-				playerGrid[verticalAxis][horizontalAxis] = '4';
-				playerGrid[verticalAxis1][horizontalAxis] = '4';
-				playerGrid[verticalAxis2][horizontalAxis] = '4';
-				playerGrid[verticalAxis3][horizontalAxis] = '4';						
+				playerGrid[verticalAxis][horizontalAxis] = '';
+				playerGrid[verticalAxis1][horizontalAxis] = '';
+				playerGrid[verticalAxis2][horizontalAxis] = '';
+				playerGrid[verticalAxis3][horizontalAxis] = '';						
 			} else if (sizeOfShip === 5) {
-				playerGrid[verticalAxis][horizontalAxis] = '5';
-				playerGrid[verticalAxis1][horizontalAxis] = '5';
-				playerGrid[verticalAxis2][horizontalAxis] = '5';
-				playerGrid[verticalAxis3][horizontalAxis] = '5';				
-				playerGrid[verticalAxis4][horizontalAxis] = '5';
+				playerGrid[verticalAxis][horizontalAxis] = '';
+				playerGrid[verticalAxis1][horizontalAxis] = '';
+				playerGrid[verticalAxis2][horizontalAxis] = '';
+				playerGrid[verticalAxis3][horizontalAxis] = '';				
+				playerGrid[verticalAxis4][horizontalAxis] = '';
 			}
 	}
 }
@@ -119,38 +130,38 @@ function placeHorizontal(sizeOfShip, entity) {								// edge cases - boats are 
 
 	if (computerOrPlayer === 'computer') {
 		if (sizeOfShip === 4) {
-			computerGrid[verticalAxis][horizontalAxis] = '4';
-			computerGrid[verticalAxis][horizontalAxis1] = '4';				
-			computerGrid[verticalAxis][horizontalAxis2] = '4';
-			computerGrid[verticalAxis][horizontalAxis3] = '4';
+			computerGrid[verticalAxis][horizontalAxis] = '';
+			computerGrid[verticalAxis][horizontalAxis1] = '';				
+			computerGrid[verticalAxis][horizontalAxis2] = '';
+			computerGrid[verticalAxis][horizontalAxis3] = '';
 		} else if (sizeOfShip === 5) {
-			computerGrid[verticalAxis][horizontalAxis] = '5';
-			computerGrid[verticalAxis][horizontalAxis1] = '5';
-			computerGrid[verticalAxis][horizontalAxis2] = '5';
-			computerGrid[verticalAxis][horizontalAxis3] = '5';
-			computerGrid[verticalAxis][horizontalAxis4] = '5';					
+			computerGrid[verticalAxis][horizontalAxis] = '';
+			computerGrid[verticalAxis][horizontalAxis1] = '';
+			computerGrid[verticalAxis][horizontalAxis2] = '';
+			computerGrid[verticalAxis][horizontalAxis3] = '';
+			computerGrid[verticalAxis][horizontalAxis4] = '';					
 		}
 	} else if (computerOrPlayer === 'player') {
 		if (sizeOfShip === 4) {
-			playerGrid[verticalAxis][horizontalAxis] = '4';
-			playerGrid[verticalAxis][horizontalAxis1] = '4';				
-			playerGrid[verticalAxis][horizontalAxis2] = '4';
-			playerGrid[verticalAxis][horizontalAxis3] = '4';
+			playerGrid[verticalAxis][horizontalAxis] = '';
+			playerGrid[verticalAxis][horizontalAxis1] = '';				
+			playerGrid[verticalAxis][horizontalAxis2] = '';
+			playerGrid[verticalAxis][horizontalAxis3] = '';
 		} else if (sizeOfShip === 5) {
-			playerGrid[verticalAxis][horizontalAxis] = '5';
-			playerGrid[verticalAxis][horizontalAxis1] = '5';
-			playerGrid[verticalAxis][horizontalAxis2] = '5';
-			playerGrid[verticalAxis][horizontalAxis3] = '5';
-			playerGrid[verticalAxis][horizontalAxis4] = '5';					
+			playerGrid[verticalAxis][horizontalAxis] = '';
+			playerGrid[verticalAxis][horizontalAxis1] = '';
+			playerGrid[verticalAxis][horizontalAxis2] = '';
+			playerGrid[verticalAxis][horizontalAxis3] = '';
+			playerGrid[verticalAxis][horizontalAxis4] = '';					
 		}		
 	}
 }
 
+///////////////// Component 2: S //////////////////
 
 
 
-
-///////////////// Component 2: SETTING THE PLAYERS BOAT POSITIONING //////////////////
+///////////////// Component ???: SETTING THE PLAYERS BOAT POSITIONING //////////////////
 
 // function setPlayerGrid() {
 // 	userInput(4);
