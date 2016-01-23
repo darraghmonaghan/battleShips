@@ -183,9 +183,17 @@ function placeHorizontal(sizeOfShip, entity) {								// edge cases - boats are 
 
 //////////////////// Component 2: DETERMINING WINNER  //////////////////////////////////
 
+var playerShotsFired = 1;				// Starting at 1 to override computer counting
+var playerShotsHit = 1;
+
+var computerShotsFired = 1;
+var computerShotsHit = 1;
+
+
 function winnerIsPlayer() {
 	if (JSON.stringify(computerGrid) === JSON.stringify(cleanGrid)) {
 		console.log('You Won! Congratulations, you rule the 7 Seas!');
+		gameStatistics();	
 	} else {
 		userInput();
 	}
@@ -195,9 +203,19 @@ function winnerIsPlayer() {
 function winnerIsComputer() {
 	if (JSON.stringify(playerGrid) === JSON.stringify(cleanGrid)) {
 		console.log('You Lost, the computer sank all your ships.');
+		gameStatistics();
 	} else {
 		computerFireMissile();
 	}
+}
+
+function gameStatistics() {
+	var playerAccuracy = Math.round((playerShotsHit / playerShotsFired)*100);
+	var computerAccuracy = Math.round((computerShotsHit / computerShotsFired)*100);
+
+	console.log('Game Statistics:');
+	console.log('No. of Missiles you fired: ' + playerShotsFired + ', Accuracy: ' + playerAccuracy + '%');
+	console.log('No. of Missiles the enemy fired: ' + computerShotsFired + ', Accuracy: ' + computerAccuracy + '%');
 }
 
 ///////////////// Component 3: USER FIRING MISSILES //////////////////
@@ -238,12 +256,14 @@ function userFireMissile(coordinates) {
 		console.log('HIT! Successful missile strike!');
 		updateComputerGrid(yAxis, xAxisConverted);
 		successfulAttempts(yAxis, xAxisConverted);
+		playerShotsHit++;
 		winnerIsPlayer();
 	} else {
 		console.log('Miss. Missile missed target, Captain.');
 		missedAttempts(yAxis, xAxisConverted);
 		computerFireMissile();
 	}
+	playerShotsFired++;
 }
 
 function successfulAttempts(xAxis, yAxis) {
@@ -276,6 +296,7 @@ function computerFireMissile() {
 		console.log('Captain, fleet vessel suffered a direct hit');
 		playerGrid[xAxis][yAxis] = "-";
 		computerFired[xAxis][yAxis] = 'F';
+		computerShotsHit++;
 		winnerIsComputer();
 
 	} else {
@@ -283,6 +304,7 @@ function computerFireMissile() {
 		computerFired[xAxis][yAxis] = 'F';
 		userInput();
 	}
+	computerShotsFired++;
 }
 
 
@@ -319,11 +341,9 @@ function convertLetterToInteger(input) {					// convert letter(A-J) to number(0-
 // CALLING THE GAME START //
 
 function startGame() {
-
 	setComputerGrid();
 	setPlayerGrid();
 	userInput();
-
 }
 
 
