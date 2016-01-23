@@ -224,30 +224,47 @@ function userInput() {
 	console.log('Coordinates of previous missile attempts:');
 	console.log(playerFired);
 
-	console.log('computer grid below:')
+	console.log('computer grid below:')										// REMOVE WHEN MOVING TO PRODUCTION //
 	console.log(computerGrid);
 
 	prompt.start();
 	console.log('Select the coordinates you would like to fire at, (A-J & 1-10, e.g. F8)');
 	prompt.get(['coordinates'], function (err, result) {
 
-	userFireMissile(result.coordinates);
-	
+	// userFireMissile(result.coordinates);
+
+		var xAxis = result.coordinates[0];
+
+		if (result.coordinates[2] !== undefined) {									// Required for naming purposes in Command Line interface
+			var combine = ('' + result.coordinates[1] + result.coordinates[2]);		// EDGE CASE - if a double digit coordinate is entered, e.g. B10
+			var yAxis = parseInt(combine);
+		} else {
+			var yAxis = parseInt(result.coordinates[1]);
+		}
+
+		var xAxisConverted = convertLetterToInteger(result.coordinates[0]);			// Converting the xAxis letter to number for use in array
+
+		if (xAxisConverted === false || yAxis > 10) {								// Ensuring valid user input
+			console.log('invalid entry, please select a letter from A-J, and a digit 1-10, e.g. F8');
+			userInput();
+		} else {
+			userFireMissile(xAxis, yAxis, xAxisConverted);		
+		}
 	})
 }
 
-function userFireMissile(coordinates) {
+function userFireMissile(xAxis, yAxis, xAxisConverted) {
 	
-	var xAxis = coordinates[0];											// Required for naming purposes in Command Line interface
+	// var xAxis = coordinates[0];											
 	
-	if (coordinates[2] !== undefined) {
-		var combine = ('' + coordinates[1] + coordinates[2]);			// EDGE CASE - if a double digit coordinate is entered, e.g. B10
-		var yAxis = parseInt(combine);
-	} else {
-		var yAxis = parseInt(coordinates[1]);		
-	}
+	// if (coordinates[2] !== undefined) {
+	// 	var combine = ('' + coordinates[1] + coordinates[2]);			
+	// 	var yAxis = parseInt(combine);
+	// } else {
+	// 	var yAxis = parseInt(coordinates[1]);		
+	// }
 
-	var xAxisConverted = convertLetterToInteger(coordinates[0]);		// Converting the xAxis letter to number for use in array
+	// var xAxisConverted = convertLetterToInteger(coordinates[0]);		
 
 	console.log('-------------------------')
 	console.log('Missile being fired at: ' + xAxis + yAxis);
@@ -333,6 +350,8 @@ function convertLetterToInteger(input) {					// convert letter(A-J) to number(0-
 		return 9;
 	} else if (letter === 'J') {
 		return 10;
+	} else {
+		return false;
 	}
 }
 
@@ -348,6 +367,8 @@ function startGame() {
 
 
 startGame();
+
+// convertLetterToInteger('Z');
 
 
 
