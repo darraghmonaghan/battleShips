@@ -1,6 +1,7 @@
 
 var prompt = require('prompt');
 
+// below grid is used for comparison purposes, helping determine a winner
 var cleanGrid = [['-','A','B','C','D','E','F','G','H','I','J'],
 					['1','-','-','-','-','-','-','-','-','-','-'],
 					['2','-','-','-','-','-','-','-','-','-','-'],
@@ -13,6 +14,9 @@ var cleanGrid = [['-','A','B','C','D','E','F','G','H','I','J'],
 					['9','-','-','-','-','-','-','-','-','-','-'],
 					['10','-','-','-','-','-','-','-','-','-','-']];
 
+//////////////////////////  PLAYER GRIDS  /////////////////////////////
+
+// Grid where the Players boats will be placed
 var playerGrid = [['-','A','B','C','D','E','F','G','H','I','J'],
 					['1','-','-','-','-','-','-','-','-','-','-'],
 					['2','-','-','-','-','-','-','-','-','-','-'],
@@ -25,6 +29,7 @@ var playerGrid = [['-','A','B','C','D','E','F','G','H','I','J'],
 					['9','-','-','-','-','-','-','-','-','-','-'],
 					['10','-','-','-','-','-','-','-','-','-','-']];
 
+// Grid where the Players fired missiles will be recorded
 var playerFired = [['-','A','B','C','D','E','F','G','H','I','J'],
 					['1','-','-','-','-','-','-','-','-','-','-'],
 					['2','-','-','-','-','-','-','-','-','-','-'],
@@ -37,6 +42,9 @@ var playerFired = [['-','A','B','C','D','E','F','G','H','I','J'],
 					['9','-','-','-','-','-','-','-','-','-','-'],
 					['10','-','-','-','-','-','-','-','-','-','-']];
 
+//////////////////////////  COMPUTER GRIDS  /////////////////////////////
+
+// Grid where the Computers boats will be placed
 var computerGrid = [['-','A','B','C','D','E','F','G','H','I','J'],
 					['1','-','-','-','-','-','-','-','-','-','-'],
 					['2','-','-','-','-','-','-','-','-','-','-'],
@@ -49,10 +57,21 @@ var computerGrid = [['-','A','B','C','D','E','F','G','H','I','J'],
 					['9','-','-','-','-','-','-','-','-','-','-'],
 					['10','-','-','-','-','-','-','-','-','-','-']];
 
+// Grid where the Computers fired missiles will be recorded
+var computerFired = [['-','A','B','C','D','E','F','G','H','I','J'],
+					['1','-','-','-','-','-','-','-','-','-','-'],
+					['2','-','-','-','-','-','-','-','-','-','-'],
+					['3','-','-','-','-','-','-','-','-','-','-'],
+					['4','-','-','-','-','-','-','-','-','-','-'],
+					['5','-','-','-','-','-','-','-','-','-','-'],
+					['6','-','-','-','-','-','-','-','-','-','-'],
+					['7','-','-','-','-','-','-','-','-','-','-'],
+					['8','-','-','-','-','-','-','-','-','-','-'],
+					['9','-','-','-','-','-','-','-','-','-','-'],
+					['10','-','-','-','-','-','-','-','-','-','-']];					
+
 
 ///////////////////// Component 1: SETTING COMPUTERS & PlAYERS BOAT POSITIONING ////////////////////////
-
-
 
 function setComputerGrid() {
 	var sizeOfShip = [4,4,5];
@@ -70,8 +89,6 @@ function setPlayerGrid() {
 	}
 }
 
-
-
 function horizontalOrVertical(sizeOfShip, entity) {
 	randomNumber = Math.random();
 
@@ -82,7 +99,7 @@ function horizontalOrVertical(sizeOfShip, entity) {
 	}
 }
 
-function placeVertical(sizeOfShip, entity) {								// edge cases - boats are overlapped / overwritten
+function placeVertical(sizeOfShip, entity) {							// edge cases - boats are overlapped / overwritten
 	var sizeOfShip = sizeOfShip;
 	var computerOrPlayer = entity;
 	var verticalAxis = Math.round((Math.random() * 5) + 1);				// plus one to ensure the A-J or 1-10 labels
@@ -167,26 +184,30 @@ function placeHorizontal(sizeOfShip, entity) {								// edge cases - boats are 
 //////////////////// Component 2: DETERMINING WINNER  //////////////////////////////////
 
 function winnerIsPlayer() {
-	if (computerGrid === cleanGrid) {
+	if (JSON.stringify(computerGrid) === JSON.stringify(cleanGrid)) {
 		console.log('You Won! Congratulations, you rule the 7 Seas!');
 	} else {
 		userInput();
 	}
 }
 
+
 function winnerIsComputer() {
-	if (playerGrid === cleanGrid) {
+	if (JSON.stringify(playerGrid) === JSON.stringify(cleanGrid)) {
 		console.log('You Lost, the computer sank all your ships.');
 	} else {
 		computerFireMissile();
 	}
 }
 
-///////////////// Component 3: USER FIRING MiSSLES //////////////////
+///////////////// Component 3: USER FIRING MISSILES //////////////////
 
 function userInput() {
-	console.log('Previous missile strikes:')
+	console.log('Coordinates of previous missile attempts:');
 	console.log(playerFired);
+
+	console.log('computer grid below:')
+	console.log(computerGrid);
 
 	prompt.start();
 	console.log('Select the coordinates you would like to fire at, (A-J & 1-10, e.g. F8)');
@@ -199,37 +220,42 @@ function userInput() {
 
 function userFireMissile(coordinates) {
 	
-	var xAxis = coordinates[0];
-	var yAxis = coordinates[1];
+	var xAxis = coordinates[0];											// Required for naming purposes in Command Line interface
+	
+	if (coordinates[2] !== undefined) {
+		var combine = ('' + coordinates[1] + coordinates[2]);			// EDGE CASE - if a double digit coordinate is entered, e.g. B10
+		var yAxis = parseInt(combine);
+	} else {
+		var yAxis = parseInt(coordinates[1]);		
+	}
 
-	var xAxisConverted = convertLetterToInteger(coordinates[0]);		// converting letter character to number
-	var yAxisConverted = parseInt(coordinates[1]);					// converting number from string to integer	
+	var xAxisConverted = convertLetterToInteger(coordinates[0]);		// Converting the xAxis letter to number for use in array
 
 	console.log('-------------------------')
 	console.log('Missile being fired at: ' + xAxis + yAxis);
 
-	if (computerGrid[xAxisConverted][yAxisConverted] === '') {
+	if (computerGrid[yAxis][xAxisConverted] === '') {
 		console.log('HIT! Successful missile strike!');
-		updateComputerGrid(xAxisConverted, yAxisConverted);
-		successfulAttempts(xAxisConverted, yAxisConverted);
+		updateComputerGrid(yAxis, xAxisConverted);
+		successfulAttempts(yAxis, xAxisConverted);
 		winnerIsPlayer();
 	} else {
 		console.log('Miss. Missile missed target, Captain.');
-		missedAttempts(xAxisConverted, yAxisConverted);
+		missedAttempts(yAxis, xAxisConverted);
 		computerFireMissile();
 	}
 }
 
 function successfulAttempts(xAxis, yAxis) {
-	playerFired[yAxis][xAxis] = '✔';
+	playerFired[xAxis][yAxis] = '✔';
 }
 
 function missedAttempts(xAxis, yAxis) {
-	playerFired[yAxis][xAxis] = '✕';
+	playerFired[xAxis][yAxis] = '✕';
 }
 
 function updateComputerGrid(xAxis, yAxis) {
-	computerGrid[yAxis][xAxis] = '-';
+	computerGrid[xAxis][yAxis] = '-';
 }
 
 
@@ -243,74 +269,24 @@ function computerFireMissile() {
 	console.log('------------------------------');
 	console.log('Captain, enemy missile fired!');
 
-	if (playerGrid[xAxis][yAxis] === "") {
+	if (computerFired[xAxis][yAxis] === 'F') {							// If a missile has already been fired at this coordinate, retarget
+		computerFireMissile();
+
+	} else if (playerGrid[xAxis][yAxis] === "") {
 		console.log('Captain, fleet vessel suffered a direct hit');
 		playerGrid[xAxis][yAxis] = "-";
+		computerFired[xAxis][yAxis] = 'F';
 		winnerIsComputer();
+
 	} else {
 		console.log("Enemy missile missed, landed in the water.");
+		computerFired[xAxis][yAxis] = 'F';
 		userInput();
 	}
 }
 
 
-
-
-///////////////// Component ???: SETTING THE PLAYERS BOAT POSITIONING //////////////////
-
-
-
-// function userInput(boatSize) {
-//   prompt.start();
-//   console.log('Please select the placement of your ship, input params: X-Axis = A to J (Uppercase), Y-Axis = 1 to 10, Ship Placement = "vertical" or "horizontal" (lowercase):');
-//   prompt.get(['XAxis', 'YAxis', 'Placement'], function (err, result) {
-
-//   	////////////////////////// BUG BELOW //////////////////////////
-
-//     if (result.Placement !== ('vertical' && 'horizontal')) {						// BUG HERE - logical operator not working
-//     	console.log('invalid entry, check spelling of "horizontal" or "vertical"');
-//     } else if (result.Placement === 'horizontal') {
-//     	placePlayerBoatHorizontal(result.XAxis, result.YAxis, boatSize);    	
-//     } else if (result.Placement === 'vertical') {
-//     	placePlayerBoatVertical(result.XAxis, result.YAxis, boatSize);
-//     }
-//   });
-// }
-
-
-
-// function placePlayerBoatHorizontal(XAxis, YAxis, boatSize) {
-//     var verticalAxisData = parseInt(YAxis);						// converting it into a number
-//     var horizontalAxisData = convertLetterToInteger(XAxis);			// converting axis letter into a number
-
-//     var horizontalAxisData1 = (horizontalAxisData + 1);
-//     var horizontalAxisData2 = (horizontalAxisData + 2);
-//     var horizontalAxisData3 = (horizontalAxisData + 3);
-//     var horizontalAxisData4 = (horizontalAxisData + 4);
-//     var horizontalAxisData5 = (horizontalAxisData + 5);
-
-//     if (boatSize === 4) {
-//     	playerGrid[verticalAxisData][horizontalAxisData] = 'S';
-//     	playerGrid[verticalAxisData][horizontalAxisData1] = 'S';
-//     	playerGrid[verticalAxisData][horizontalAxisData2] = 'S';
-//     	playerGrid[verticalAxisData][horizontalAxisData3] = 'S';    	    	    	
-//     } else if (boatSize === 5) {
-//     	playerGrid[verticalAxisData][horizontalAxisData] = 'S';
-//     	playerGrid[verticalAxisData][horizontalAxisData1] = 'S';
-//     	playerGrid[verticalAxisData][horizontalAxisData2] = 'S';
-//     	playerGrid[verticalAxisData][horizontalAxisData3] = 'S'; 
-//     	playerGrid[verticalAxisData][horizontalAxisData4] = 'S';
-//     }
-// }
-
-
-// function placePlayerBoatVertical(XAxis, YAxis, boatSize) {
-//     var YAxisData = parseInt(YAxis);
-//     var horizontalAxisData = convertLetterToInteger(XAxis);		
-// }
-
-
-
+///////////////// Component ???: SUPPORT FUNCTIONS //////////////////
 
 function convertLetterToInteger(input) {					// convert letter(A-J) to number(0-9) and return
 	var letter = input.toUpperCase();
@@ -352,6 +328,8 @@ function startGame() {
 
 
 startGame();
+
+
 
 
 
