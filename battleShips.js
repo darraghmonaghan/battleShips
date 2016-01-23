@@ -101,50 +101,59 @@ function horizontalOrVertical(sizeOfShip, entity) {
 
 function placeVertical(sizeOfShip, entity) {							// edge cases - boats are overlapped / overwritten
 	var sizeOfShip = sizeOfShip;
-	var verticalAxis = Math.round((Math.random() * 5) + 1);				// plus one to ensure the A-J or 1-10 labels
-	var horizontalAxis = Math.round((Math.random() * 9) + 1);			// plus one to ensure the A-J or 1-10 labels
+	var horizontalAxis = randomLongNumber();
+	var verticalAxis = randomShortNumber();
 
 	var verticalAxis1 = (verticalAxis + 1);
 	var verticalAxis2 = (verticalAxis + 2);
 	var verticalAxis3 = (verticalAxis + 3);
 	var verticalAxis4 = (verticalAxis + 4);
 
-	if (sizeOfShip === 4) {
-		eval(entity)[verticalAxis][horizontalAxis] = '';			// refactor to a single set - remove 'computer' or 'player', and use entity + 'Grid'
-		eval(entity)[verticalAxis1][horizontalAxis] = '';
-		eval(entity)[verticalAxis2][horizontalAxis] = '';
-		eval(entity)[verticalAxis3][horizontalAxis] = '';						
-	} else if (sizeOfShip === 5) {
-		eval(entity)[verticalAxis][horizontalAxis] = '';
-		eval(entity)[verticalAxis1][horizontalAxis] = '';
-		eval(entity)[verticalAxis2][horizontalAxis] = '';
-		eval(entity)[verticalAxis3][horizontalAxis] = '';				
-		eval(entity)[verticalAxis4][horizontalAxis] = '';
+	if ((eval(entity)[verticalAxis][horizontalAxis]) && (eval(entity)[verticalAxis1][horizontalAxis]) && (eval(entity)[verticalAxis2][horizontalAxis]) && (eval(entity)[verticalAxis3][horizontalAxis]) === '-') {		// ensures that boats are not overlapped //
+		if (sizeOfShip === 4) {
+			eval(entity)[verticalAxis][horizontalAxis] = '';			
+			eval(entity)[verticalAxis1][horizontalAxis] = '';
+			eval(entity)[verticalAxis2][horizontalAxis] = '';
+			eval(entity)[verticalAxis3][horizontalAxis] = '';
+		} else if (sizeOfShip === 5) {
+			eval(entity)[verticalAxis][horizontalAxis] = '';
+			eval(entity)[verticalAxis1][horizontalAxis] = '';
+			eval(entity)[verticalAxis2][horizontalAxis] = '';
+			eval(entity)[verticalAxis3][horizontalAxis] = '';				
+			eval(entity)[verticalAxis4][horizontalAxis] = '';
+		}			
+	} else {
+		placeVertical(sizeOfShip, entity);
 	}
 }
 
-function placeHorizontal(sizeOfShip, entity) {								// edge cases - boats are overlapped / overwritten
+
+function placeHorizontal(sizeOfShip, entity) {								
 	var sizeOfShip = sizeOfShip;
-	var verticalAxis = Math.round((Math.random() * 9) + 1);
-	var horizontalAxis = Math.round((Math.random() * 5) + 1);
+	var verticalAxis = randomLongNumber();
+	var horizontalAxis = randomShortNumber();
 
 	var horizontalAxis1 = (horizontalAxis + 1);
 	var horizontalAxis2 = (horizontalAxis + 2);
 	var horizontalAxis3 = (horizontalAxis + 3);
 	var horizontalAxis4 = (horizontalAxis + 4);
 
-	if (sizeOfShip === 4) {
-		eval(entity)[verticalAxis][horizontalAxis] = '';
-		eval(entity)[verticalAxis][horizontalAxis1] = '';				
-		eval(entity)[verticalAxis][horizontalAxis2] = '';
-		eval(entity)[verticalAxis][horizontalAxis3] = '';
-	} else if (sizeOfShip === 5) {
-		eval(entity)[verticalAxis][horizontalAxis] = '';
-		eval(entity)[verticalAxis][horizontalAxis1] = '';
-		eval(entity)[verticalAxis][horizontalAxis2] = '';
-		eval(entity)[verticalAxis][horizontalAxis3] = '';
-		eval(entity)[verticalAxis][horizontalAxis4] = '';					
-	}		
+	if ((eval(entity)[verticalAxis][horizontalAxis]) && (eval(entity)[verticalAxis][horizontalAxis1]) && (eval(entity)[verticalAxis][horizontalAxis2])  && (eval(entity)[verticalAxis][horizontalAxis3]) === '-') {			// ensures that boats are not overlapped //
+		if (sizeOfShip === 4) {
+			eval(entity)[verticalAxis][horizontalAxis] = '';
+			eval(entity)[verticalAxis][horizontalAxis1] = '';				
+			eval(entity)[verticalAxis][horizontalAxis2] = '';
+			eval(entity)[verticalAxis][horizontalAxis3] = '';
+		} else if (sizeOfShip === 5) {
+			eval(entity)[verticalAxis][horizontalAxis] = '';
+			eval(entity)[verticalAxis][horizontalAxis1] = '';
+			eval(entity)[verticalAxis][horizontalAxis2] = '';
+			eval(entity)[verticalAxis][horizontalAxis3] = '';
+			eval(entity)[verticalAxis][horizontalAxis4] = '';		
+		}	
+	} else {
+		placeHorizontal(sizeOfShip, entity);
+	}
 }
 
 
@@ -158,7 +167,7 @@ var computerShotsHit = 1;
 
 
 function winnerIsPlayer() {
-	if (JSON.stringify(computer) === JSON.stringify(cleanGrid)) {
+	if (JSON.stringify(computer) === JSON.stringify(cleanGrid)) {			// stringify grid for ease of comparison
 		console.log('You Won! Congratulations, you rule the 7 Seas!');
 		gameStatistics();	
 	} else {
@@ -166,9 +175,8 @@ function winnerIsPlayer() {
 	}
 }
 
-
 function winnerIsComputer() {
-	if (JSON.stringify(player) === JSON.stringify(cleanGrid)) {
+	if (JSON.stringify(player) === JSON.stringify(cleanGrid)) {				// stringify grid for ease of comparison
 		console.log('You Lost, the computer sank all your ships.');
 		gameStatistics();
 	} else {
@@ -197,8 +205,6 @@ function userInput() {
 	prompt.start();
 	console.log('Select the coordinates you would like to fire at, (A-J & 1-10, e.g. F8)');
 	prompt.get(['coordinates'], function (err, result) {
-
-	// userFireMissile(result.coordinates);
 
 		var xAxis = result.coordinates[0];
 
@@ -256,8 +262,8 @@ function updateComputerGrid(xAxis, yAxis) {
 
 function computerFireMissile() {
 
-	var xAxis = Math.round((Math.random() * 9) + 1);
-	var yAxis = Math.round((Math.random() * 9) + 1);
+	var xAxis = randomLongNumber();
+	var yAxis = randomLongNumber();
 
 	console.log('------------------------------');
 	console.log('Captain, enemy missile fired!');
@@ -282,6 +288,17 @@ function computerFireMissile() {
 
 
 ///////////////// Component 5: SUPPORT FUNCTIONS //////////////////
+
+function randomShortNumber() {
+	var randomNumber = Math.round((Math.random() * 5) + 1);	
+	return randomNumber;
+}
+
+function randomLongNumber() {
+	var randomNumber = Math.round((Math.random() * 9) + 1);
+	return randomNumber;
+}
+
 
 function convertLetterToInteger(input) {					// convert letter(A-J) to number(0-9) and return
 	var letter = input.toUpperCase();
