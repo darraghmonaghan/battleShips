@@ -17,7 +17,7 @@ var cleanGrid = [['-','A','B','C','D','E','F','G','H','I','J'],
 //////////////////////////  PLAYER GRIDS  /////////////////////////////
 
 // Grid where the Players boats will be placed
-var playerGrid = [['-','A','B','C','D','E','F','G','H','I','J'],
+var player = [['-','A','B','C','D','E','F','G','H','I','J'],
 					['1','-','-','-','-','-','-','-','-','-','-'],
 					['2','-','-','-','-','-','-','-','-','-','-'],
 					['3','-','-','-','-','-','-','-','-','-','-'],
@@ -45,7 +45,7 @@ var playerFired = [['-','A','B','C','D','E','F','G','H','I','J'],
 //////////////////////////  COMPUTER GRIDS  /////////////////////////////
 
 // Grid where the Computers boats will be placed
-var computerGrid = [['-','A','B','C','D','E','F','G','H','I','J'],
+var computer = [['-','A','B','C','D','E','F','G','H','I','J'],
 					['1','-','-','-','-','-','-','-','-','-','-'],
 					['2','-','-','-','-','-','-','-','-','-','-'],
 					['3','-','-','-','-','-','-','-','-','-','-'],
@@ -101,7 +101,6 @@ function horizontalOrVertical(sizeOfShip, entity) {
 
 function placeVertical(sizeOfShip, entity) {							// edge cases - boats are overlapped / overwritten
 	var sizeOfShip = sizeOfShip;
-	var computerOrPlayer = entity;
 	var verticalAxis = Math.round((Math.random() * 5) + 1);				// plus one to ensure the A-J or 1-10 labels
 	var horizontalAxis = Math.round((Math.random() * 9) + 1);			// plus one to ensure the A-J or 1-10 labels
 
@@ -110,74 +109,42 @@ function placeVertical(sizeOfShip, entity) {							// edge cases - boats are ove
 	var verticalAxis3 = (verticalAxis + 3);
 	var verticalAxis4 = (verticalAxis + 4);
 
-	if (computerOrPlayer === 'computer') {
-			if (sizeOfShip === 4) {
-				computerGrid[verticalAxis][horizontalAxis] = '';
-				computerGrid[verticalAxis1][horizontalAxis] = '';
-				computerGrid[verticalAxis2][horizontalAxis] = '';
-				computerGrid[verticalAxis3][horizontalAxis] = '';						
-			} else if (sizeOfShip === 5) {
-				computerGrid[verticalAxis][horizontalAxis] = '';
-				computerGrid[verticalAxis1][horizontalAxis] = '';
-				computerGrid[verticalAxis2][horizontalAxis] = '';
-				computerGrid[verticalAxis3][horizontalAxis] = '';				
-				computerGrid[verticalAxis4][horizontalAxis] = '';
-			}
-	} else if (computerOrPlayer === 'player') {
-			if (sizeOfShip === 4) {
-				playerGrid[verticalAxis][horizontalAxis] = '';
-				playerGrid[verticalAxis1][horizontalAxis] = '';
-				playerGrid[verticalAxis2][horizontalAxis] = '';
-				playerGrid[verticalAxis3][horizontalAxis] = '';						
-			} else if (sizeOfShip === 5) {
-				playerGrid[verticalAxis][horizontalAxis] = '';
-				playerGrid[verticalAxis1][horizontalAxis] = '';
-				playerGrid[verticalAxis2][horizontalAxis] = '';
-				playerGrid[verticalAxis3][horizontalAxis] = '';				
-				playerGrid[verticalAxis4][horizontalAxis] = '';
-			}
+	if (sizeOfShip === 4) {
+		eval(entity)[verticalAxis][horizontalAxis] = '';			// refactor to a single set - remove 'computer' or 'player', and use entity + 'Grid'
+		eval(entity)[verticalAxis1][horizontalAxis] = '';
+		eval(entity)[verticalAxis2][horizontalAxis] = '';
+		eval(entity)[verticalAxis3][horizontalAxis] = '';						
+	} else if (sizeOfShip === 5) {
+		eval(entity)[verticalAxis][horizontalAxis] = '';
+		eval(entity)[verticalAxis1][horizontalAxis] = '';
+		eval(entity)[verticalAxis2][horizontalAxis] = '';
+		eval(entity)[verticalAxis3][horizontalAxis] = '';				
+		eval(entity)[verticalAxis4][horizontalAxis] = '';
 	}
 }
 
 function placeHorizontal(sizeOfShip, entity) {								// edge cases - boats are overlapped / overwritten
 	var sizeOfShip = sizeOfShip;
-	var computerOrPlayer = entity;
-	var verticalAxis = Math.round((Math.random() * 9));
-	var horizontalAxis = Math.round((Math.random() * 5));
+	var verticalAxis = Math.round((Math.random() * 9) + 1);
+	var horizontalAxis = Math.round((Math.random() * 5) + 1);
 
 	var horizontalAxis1 = (horizontalAxis + 1);
 	var horizontalAxis2 = (horizontalAxis + 2);
 	var horizontalAxis3 = (horizontalAxis + 3);
 	var horizontalAxis4 = (horizontalAxis + 4);
 
-
-	if (computerOrPlayer === 'computer') {
-		if (sizeOfShip === 4) {
-			computerGrid[verticalAxis][horizontalAxis] = '';
-			computerGrid[verticalAxis][horizontalAxis1] = '';				
-			computerGrid[verticalAxis][horizontalAxis2] = '';
-			computerGrid[verticalAxis][horizontalAxis3] = '';
-		} else if (sizeOfShip === 5) {
-			computerGrid[verticalAxis][horizontalAxis] = '';
-			computerGrid[verticalAxis][horizontalAxis1] = '';
-			computerGrid[verticalAxis][horizontalAxis2] = '';
-			computerGrid[verticalAxis][horizontalAxis3] = '';
-			computerGrid[verticalAxis][horizontalAxis4] = '';					
-		}
-	} else if (computerOrPlayer === 'player') {
-		if (sizeOfShip === 4) {
-			playerGrid[verticalAxis][horizontalAxis] = '';
-			playerGrid[verticalAxis][horizontalAxis1] = '';				
-			playerGrid[verticalAxis][horizontalAxis2] = '';
-			playerGrid[verticalAxis][horizontalAxis3] = '';
-		} else if (sizeOfShip === 5) {
-			playerGrid[verticalAxis][horizontalAxis] = '';
-			playerGrid[verticalAxis][horizontalAxis1] = '';
-			playerGrid[verticalAxis][horizontalAxis2] = '';
-			playerGrid[verticalAxis][horizontalAxis3] = '';
-			playerGrid[verticalAxis][horizontalAxis4] = '';					
-		}		
-	}
+	if (sizeOfShip === 4) {
+		eval(entity)[verticalAxis][horizontalAxis] = '';
+		eval(entity)[verticalAxis][horizontalAxis1] = '';				
+		eval(entity)[verticalAxis][horizontalAxis2] = '';
+		eval(entity)[verticalAxis][horizontalAxis3] = '';
+	} else if (sizeOfShip === 5) {
+		eval(entity)[verticalAxis][horizontalAxis] = '';
+		eval(entity)[verticalAxis][horizontalAxis1] = '';
+		eval(entity)[verticalAxis][horizontalAxis2] = '';
+		eval(entity)[verticalAxis][horizontalAxis3] = '';
+		eval(entity)[verticalAxis][horizontalAxis4] = '';					
+	}		
 }
 
 
@@ -191,7 +158,7 @@ var computerShotsHit = 1;
 
 
 function winnerIsPlayer() {
-	if (JSON.stringify(computerGrid) === JSON.stringify(cleanGrid)) {
+	if (JSON.stringify(computer) === JSON.stringify(cleanGrid)) {
 		console.log('You Won! Congratulations, you rule the 7 Seas!');
 		gameStatistics();	
 	} else {
@@ -201,7 +168,7 @@ function winnerIsPlayer() {
 
 
 function winnerIsComputer() {
-	if (JSON.stringify(playerGrid) === JSON.stringify(cleanGrid)) {
+	if (JSON.stringify(player) === JSON.stringify(cleanGrid)) {
 		console.log('You Lost, the computer sank all your ships.');
 		gameStatistics();
 	} else {
@@ -225,7 +192,7 @@ function userInput() {
 	console.log(playerFired);
 
 	console.log('computer grid below:')										// REMOVE WHEN MOVING TO PRODUCTION //
-	console.log(computerGrid);
+	console.log(computer);
 
 	prompt.start();
 	console.log('Select the coordinates you would like to fire at, (A-J & 1-10, e.g. F8)');
@@ -254,22 +221,11 @@ function userInput() {
 }
 
 function userFireMissile(xAxis, yAxis, xAxisConverted) {
-	
-	// var xAxis = coordinates[0];											
-	
-	// if (coordinates[2] !== undefined) {
-	// 	var combine = ('' + coordinates[1] + coordinates[2]);			
-	// 	var yAxis = parseInt(combine);
-	// } else {
-	// 	var yAxis = parseInt(coordinates[1]);		
-	// }
-
-	// var xAxisConverted = convertLetterToInteger(coordinates[0]);		
-
+		
 	console.log('-------------------------')
 	console.log('Missile being fired at: ' + xAxis + yAxis);
 
-	if (computerGrid[yAxis][xAxisConverted] === '') {
+	if (computer[yAxis][xAxisConverted] === '') {
 		console.log('HIT! Successful missile strike!');
 		updateComputerGrid(yAxis, xAxisConverted);
 		successfulAttempts(yAxis, xAxisConverted);
@@ -292,7 +248,7 @@ function missedAttempts(xAxis, yAxis) {
 }
 
 function updateComputerGrid(xAxis, yAxis) {
-	computerGrid[xAxis][yAxis] = '-';
+	computer[xAxis][yAxis] = '-';
 }
 
 
@@ -309,9 +265,9 @@ function computerFireMissile() {
 	if (computerFired[xAxis][yAxis] === 'F') {							// If a missile has already been fired at this coordinate, retarget
 		computerFireMissile();
 
-	} else if (playerGrid[xAxis][yAxis] === "") {
+	} else if (player[xAxis][yAxis] === "") {
 		console.log('Captain, fleet vessel suffered a direct hit');
-		playerGrid[xAxis][yAxis] = "-";
+		player[xAxis][yAxis] = "-";
 		computerFired[xAxis][yAxis] = 'F';
 		computerShotsHit++;
 		winnerIsComputer();
@@ -325,7 +281,7 @@ function computerFireMissile() {
 }
 
 
-///////////////// Component ???: SUPPORT FUNCTIONS //////////////////
+///////////////// Component 5: SUPPORT FUNCTIONS //////////////////
 
 function convertLetterToInteger(input) {					// convert letter(A-J) to number(0-9) and return
 	var letter = input.toUpperCase();
@@ -350,14 +306,14 @@ function convertLetterToInteger(input) {					// convert letter(A-J) to number(0-
 		return 9;
 	} else if (letter === 'J') {
 		return 10;
-	} else {
+	} else {												// invalid entries return false ---> Validations on input
 		return false;
 	}
 }
 
 
 
-// CALLING THE GAME START //
+////////////////////////// CALLING THE GAME START //////////////////////
 
 function startGame() {
 	setComputerGrid();
@@ -368,7 +324,6 @@ function startGame() {
 
 startGame();
 
-// convertLetterToInteger('Z');
 
 
 
