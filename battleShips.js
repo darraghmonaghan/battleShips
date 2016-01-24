@@ -73,23 +73,15 @@ var computerFired = [['-','A','B','C','D','E','F','G','H','I','J'],
 
 ///////////////////// Component 1: SETTING COMPUTERS & PlAYERS BOAT POSITIONING ////////////////////////
 
-function setComputerGrid() {
-	var sizeOfShip = [4,4,5];
-	var computer = 'computer';
+function setGrid(entity) {
+	var sizeOfShip = [4];
+	// var computer = 'computer';
 	for (q = 0; q < sizeOfShip.length; q++) {		
-		horizontalOrVertical(sizeOfShip[q], computer);		
+		horizontalOrVertical(sizeOfShip[q], entity);		
 	}
 }
 
-function setPlayerGrid() {
-	var sizeOfShip = [4,4,5];
-	var player = 'player';
-	for (l = 0; l < sizeOfShip.length; l++) {		
-		horizontalOrVertical(sizeOfShip[l], player);		
-	}
-}
-
-function horizontalOrVertical(sizeOfShip, entity) {
+function horizontalOrVertical(sizeOfShip, entity) {						// randomly determines whether boat is place horizontally or vertically
 	randomNumber = Math.random();
 
 	if (randomNumber < 0.5) {
@@ -99,7 +91,7 @@ function horizontalOrVertical(sizeOfShip, entity) {
 	}
 }
 
-function placeVertical(sizeOfShip, entity) {							// edge cases - boats are overlapped / overwritten
+function placeVertical(sizeOfShip, entity) {							// Determines the coordinates of vertically placed boats
 	var sizeOfShip = sizeOfShip;
 	var horizontalAxis = randomLongNumber();
 	var verticalAxis = randomShortNumber();
@@ -123,12 +115,12 @@ function placeVertical(sizeOfShip, entity) {							// edge cases - boats are ove
 			eval(entity)[verticalAxis4][horizontalAxis] = '';
 		}			
 	} else {
-		placeVertical(sizeOfShip, entity);
+		placeVertical(sizeOfShip, entity);								// if boats are overlapped, then the random placement function will be run again
 	}
 }
 
 
-function placeHorizontal(sizeOfShip, entity) {								
+function placeHorizontal(sizeOfShip, entity) {							// Determines the coordinates of horizontally placed boats				
 	var sizeOfShip = sizeOfShip;
 	var verticalAxis = randomLongNumber();
 	var horizontalAxis = randomShortNumber();
@@ -152,35 +144,32 @@ function placeHorizontal(sizeOfShip, entity) {
 			eval(entity)[verticalAxis][horizontalAxis4] = '';		
 		}	
 	} else {
-		placeHorizontal(sizeOfShip, entity);
+		placeHorizontal(sizeOfShip, entity);				// if boats are overlapped, then the random placement function will be run again
 	}
 }
 
 
 //////////////////// Component 2: DETERMINING WINNER  //////////////////////////////////
 
-var playerShotsFired = 1;				// Starting at 1 to override computer counting
+var playerShotsFired = 1;				// Counter is started at 1 to Starting at 1 to override computer counting
 var playerShotsHit = 1;
 
 var computerShotsFired = 1;
 var computerShotsHit = 1;
 
+function checkWinner(entity) {
+	var checkGrid = (entity === 'player' ? 'computer' : 'player');
 
-function winnerIsPlayer() {
-	if (JSON.stringify(computer) === JSON.stringify(cleanGrid)) {			// stringify grid for ease of comparison
-		console.log('You Won! Congratulations, you rule the 7 Seas!');
-		gameStatistics();	
-	} else {
-		userInput();
-	}
-}
-
-function winnerIsComputer() {
-	if (JSON.stringify(player) === JSON.stringify(cleanGrid)) {				// stringify grid for ease of comparison
-		console.log('You Lost, the computer sank all your ships.');
+	if (JSON.stringify(eval(checkGrid)) === JSON.stringify(cleanGrid)) {
+		console.log('--------------------------------------');
+		console.log(entity + ' wins!');
 		gameStatistics();
 	} else {
-		computerFireMissile();
+		if (entity === 'player') {
+			userInput();
+		} else if (entity === 'computer') {
+			computerFireMissile();
+		}
 	}
 }
 
@@ -196,6 +185,7 @@ function gameStatistics() {
 ///////////////// Component 3: USER FIRING MISSILES //////////////////
 
 function userInput() {
+	console.log('--------------------------------------');
 	console.log('Coordinates of previous missile attempts:');
 	console.log(playerFired);
 
@@ -228,7 +218,7 @@ function userInput() {
 
 function userFireMissile(xAxis, yAxis, xAxisConverted) {
 		
-	console.log('-------------------------')
+	console.log('--------------------------------------');
 	console.log('Missile being fired at: ' + xAxis + yAxis);
 
 	if (computer[yAxis][xAxisConverted] === '') {
@@ -236,7 +226,8 @@ function userFireMissile(xAxis, yAxis, xAxisConverted) {
 		updateComputerGrid(yAxis, xAxisConverted);
 		successfulAttempts(yAxis, xAxisConverted);
 		playerShotsHit++;
-		winnerIsPlayer();
+		// winnerIsPlayer();
+		checkWinner('player');
 	} else {
 		console.log('Miss. Missile missed target, Captain.');
 		missedAttempts(yAxis, xAxisConverted);
@@ -265,7 +256,7 @@ function computerFireMissile() {
 	var xAxis = randomLongNumber();
 	var yAxis = randomLongNumber();
 
-	console.log('------------------------------');
+	console.log('--------------------------------------');
 	console.log('Captain, enemy missile fired!');
 
 	if (computerFired[xAxis][yAxis] === 'F') {							// If a missile has already been fired at this coordinate, retarget
@@ -276,8 +267,8 @@ function computerFireMissile() {
 		player[xAxis][yAxis] = "-";
 		computerFired[xAxis][yAxis] = 'F';
 		computerShotsHit++;
-		winnerIsComputer();
-
+		// winnerIsComputer();
+		checkWinner('computer');
 	} else {
 		console.log("Enemy missile missed, landed in the water.");
 		computerFired[xAxis][yAxis] = 'F';
@@ -333,8 +324,8 @@ function convertLetterToInteger(input) {					// convert letter(A-J) to number(0-
 ////////////////////////// CALLING THE GAME START //////////////////////
 
 function startGame() {
-	setComputerGrid();
-	setPlayerGrid();
+	setGrid(computer);
+	setGrid(player);
 	userInput();
 }
 
