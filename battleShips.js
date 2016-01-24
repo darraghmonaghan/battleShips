@@ -74,7 +74,7 @@ var computerFired = [['-','A','B','C','D','E','F','G','H','I','J'],
 ///////////////////// Component 1: SETTING COMPUTERS & PlAYERS BOAT POSITIONING ////////////////////////
 
 function setGrid(entity) {
-	var sizeOfShip = [4];
+	var sizeOfShip = [4,4,5];
 	// var computer = 'computer';
 	for (q = 0; q < sizeOfShip.length; q++) {		
 		horizontalOrVertical(sizeOfShip[q], entity);		
@@ -151,14 +151,14 @@ function placeHorizontal(sizeOfShip, entity) {							// Determines the coordinat
 
 //////////////////// Component 2: DETERMINING WINNER  //////////////////////////////////
 
-var playerShotsFired = 1;				// Counter is started at 1 to Starting at 1 to override computer counting
-var playerShotsHit = 1;
+var playerShotsFired = 0;				// Counter is started at 1 to Starting at 1 to override computer counting
+var playerShotsHit = 0;
+var computerShotsFired = 0;
+var computerShotsHit = 0;
 
-var computerShotsFired = 1;
-var computerShotsHit = 1;
 
 function checkWinner(entity) {
-	var checkGrid = (entity === 'player' ? 'computer' : 'player');
+	var checkGrid = (entity === 'player' ? 'computer' : 'player');					// ternary opearator to determine which grid to check against clean grid
 
 	if (JSON.stringify(eval(checkGrid)) === JSON.stringify(cleanGrid)) {
 		console.log('--------------------------------------');
@@ -226,14 +226,14 @@ function userFireMissile(xAxis, yAxis, xAxisConverted) {
 		updateComputerGrid(yAxis, xAxisConverted);
 		successfulAttempts(yAxis, xAxisConverted);
 		playerShotsHit++;
-		// winnerIsPlayer();
+		playerShotsFired++;
 		checkWinner('player');
 	} else {
 		console.log('Miss. Missile missed target, Captain.');
 		missedAttempts(yAxis, xAxisConverted);
 		computerFireMissile();
+		playerShotsFired++;
 	}
-	playerShotsFired++;
 }
 
 function successfulAttempts(xAxis, yAxis) {
@@ -267,7 +267,6 @@ function computerFireMissile() {
 		player[xAxis][yAxis] = "-";
 		computerFired[xAxis][yAxis] = 'F';
 		computerShotsHit++;
-		// winnerIsComputer();
 		checkWinner('computer');
 	} else {
 		console.log("Enemy missile missed, landed in the water.");
