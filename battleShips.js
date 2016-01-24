@@ -97,7 +97,6 @@ var computerFired = [['-','A','B','C','D','E','F','G','H','I','J'],
 
 function setGrid(entity) {
 	var sizeOfShip = [4,4,5];
-	// var computer = 'computer';
 	for (q = 0; q < sizeOfShip.length; q++) {		
 		horizontalOrVertical(sizeOfShip[q], entity);		
 	}
@@ -114,7 +113,6 @@ function horizontalOrVertical(sizeOfShip, entity) {						// Randomly determines 
 }
 
 function placeVertical(sizeOfShip, entity) {							// Determines the coordinates of vertically placed boats
-	var sizeOfShip = sizeOfShip;
 	var horizontalAxis = randomLongNumber();
 	var verticalAxis = randomShortNumber();								// Short number used to ensure valid placement position of boat
 
@@ -143,7 +141,6 @@ function placeVertical(sizeOfShip, entity) {							// Determines the coordinates
 
 
 function placeHorizontal(sizeOfShip, entity) {							// Determines the coordinates of horizontally placed boats				
-	var sizeOfShip = sizeOfShip;
 	var verticalAxis = randomLongNumber();
 	var horizontalAxis = randomShortNumber();							// Short number used to ensure valid placement position of boat
 
@@ -202,8 +199,7 @@ function userInput() {
 	})
 }
 
-function userFireMissile(xAxis, yAxis, xAxisConverted) {
-		
+function userFireMissile(xAxis, yAxis, xAxisConverted) {	
 	console.log('--------------------------------------');
 	console.log('Missile being fired at: ' + xAxis + yAxis);
 
@@ -237,7 +233,6 @@ function updateComputerGrid(xAxis, yAxis) {
 //////////////////////////////  Component 4: Computer Missile Firing  /////////////////////////////////////// 
 
 function computerFireMissile() {
-
 	var xAxis = randomLongNumber();
 	var yAxis = randomLongNumber();
 
@@ -246,10 +241,9 @@ function computerFireMissile() {
 
 	if (computerFired[xAxis][yAxis] === 'F') {							// If a missile has already been fired at this coordinate, then retarget by recalling function
 		computerFireMissile();
-
-	} else if (player[xAxis][yAxis] === "") {
+	} else if (player[xAxis][yAxis] === '') {
 		console.log('Captain, fleet vessel suffered a direct hit');
-		player[xAxis][yAxis] = "-";
+		player[xAxis][yAxis] = '-';
 		computerFired[xAxis][yAxis] = 'F';
 		computerShotsHit++;
 		checkWinner('computer');
