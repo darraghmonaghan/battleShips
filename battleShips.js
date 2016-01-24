@@ -1,6 +1,25 @@
 
 var prompt = require('prompt');
 
+/////////////////////           INDEX of COMPONENT PARTS        ////////////////////////
+
+// 1. Player grids and test grids
+
+// 2. Functions for positions player and computer boats
+
+// 3. Player firing missiles
+
+// 4. Computer firing missiles
+
+// 5. Determing Winner
+
+// 6. Support Functions
+
+// 7. Calling Game Start
+
+
+///////////////////// Component 1: Template Grids for boats ////////////////////////
+
 // below grid is used for comparison purposes, helping determine a winner
 var cleanGrid = [['-','A','B','C','D','E','F','G','H','I','J'],
 					['1','-','-','-','-','-','-','-','-','-','-'],
@@ -14,7 +33,7 @@ var cleanGrid = [['-','A','B','C','D','E','F','G','H','I','J'],
 					['9','-','-','-','-','-','-','-','-','-','-'],
 					['10','-','-','-','-','-','-','-','-','-','-']];
 
-//////////////////////////  PLAYER GRIDS  /////////////////////////////
+//////////////////////////  Player Grids  /////////////////////////////
 
 // Grid where the Players boats will be placed
 var player = [['-','A','B','C','D','E','F','G','H','I','J'],
@@ -42,7 +61,7 @@ var playerFired = [['-','A','B','C','D','E','F','G','H','I','J'],
 					['9','-','-','-','-','-','-','-','-','-','-'],
 					['10','-','-','-','-','-','-','-','-','-','-']];
 
-//////////////////////////  COMPUTER GRIDS  /////////////////////////////
+//////////////////////////  Computer Grids  /////////////////////////////
 
 // Grid where the Computers boats will be placed
 var computer = [['-','A','B','C','D','E','F','G','H','I','J'],
@@ -71,7 +90,10 @@ var computerFired = [['-','A','B','C','D','E','F','G','H','I','J'],
 					['10','-','-','-','-','-','-','-','-','-','-']];					
 
 
-///////////////////// Component 1: SETTING COMPUTERS & PlAYERS BOAT POSITIONING ////////////////////////
+
+
+
+///////////////////// Component 2: SETTING COMPUTERS & PlAYERS BOAT POSITIONING ////////////////////////
 
 function setGrid(entity) {
 	var sizeOfShip = [4,4,5];
@@ -81,7 +103,7 @@ function setGrid(entity) {
 	}
 }
 
-function horizontalOrVertical(sizeOfShip, entity) {						// randomly determines whether boat is place horizontally or vertically
+function horizontalOrVertical(sizeOfShip, entity) {						// Randomly determines whether boat is place horizontally or vertically
 	randomNumber = Math.random();
 
 	if (randomNumber < 0.5) {
@@ -94,7 +116,7 @@ function horizontalOrVertical(sizeOfShip, entity) {						// randomly determines 
 function placeVertical(sizeOfShip, entity) {							// Determines the coordinates of vertically placed boats
 	var sizeOfShip = sizeOfShip;
 	var horizontalAxis = randomLongNumber();
-	var verticalAxis = randomShortNumber();
+	var verticalAxis = randomShortNumber();								// Short number used to ensure valid placement position of boat
 
 	var verticalAxis1 = (verticalAxis + 1);
 	var verticalAxis2 = (verticalAxis + 2);
@@ -123,7 +145,7 @@ function placeVertical(sizeOfShip, entity) {							// Determines the coordinates
 function placeHorizontal(sizeOfShip, entity) {							// Determines the coordinates of horizontally placed boats				
 	var sizeOfShip = sizeOfShip;
 	var verticalAxis = randomLongNumber();
-	var horizontalAxis = randomShortNumber();
+	var horizontalAxis = randomShortNumber();							// Short number used to ensure valid placement position of boat
 
 	var horizontalAxis1 = (horizontalAxis + 1);
 	var horizontalAxis2 = (horizontalAxis + 2);
@@ -144,43 +166,10 @@ function placeHorizontal(sizeOfShip, entity) {							// Determines the coordinat
 			eval(entity)[verticalAxis][horizontalAxis4] = '';		
 		}	
 	} else {
-		placeHorizontal(sizeOfShip, entity);				// if boats are overlapped, then the random placement function will be run again
+		placeHorizontal(sizeOfShip, entity);							// If boats are overlapped, then the random placement function will be run again
 	}
 }
 
-
-//////////////////// Component 2: DETERMINING WINNER  //////////////////////////////////
-
-var playerShotsFired = 0;				// Counter is started at 1 to Starting at 1 to override computer counting
-var playerShotsHit = 0;
-var computerShotsFired = 0;
-var computerShotsHit = 0;
-
-
-function checkWinner(entity) {
-	var checkGrid = (entity === 'player' ? 'computer' : 'player');					// ternary opearator to determine which grid to check against clean grid
-
-	if (JSON.stringify(eval(checkGrid)) === JSON.stringify(cleanGrid)) {
-		console.log('--------------------------------------');
-		console.log(entity + ' wins!');
-		gameStatistics();
-	} else {
-		if (entity === 'player') {
-			userInput();
-		} else if (entity === 'computer') {
-			computerFireMissile();
-		}
-	}
-}
-
-function gameStatistics() {
-	var playerAccuracy = Math.round((playerShotsHit / playerShotsFired)*100);
-	var computerAccuracy = Math.round((computerShotsHit / computerShotsFired)*100);
-
-	console.log('Game Statistics:');
-	console.log('No. of Missiles you fired: ' + playerShotsFired + ', Accuracy: ' + playerAccuracy + '%');
-	console.log('No. of Missiles the enemy fired: ' + computerShotsFired + ', Accuracy: ' + computerAccuracy + '%');
-}
 
 ///////////////// Component 3: USER FIRING MISSILES //////////////////
 
@@ -189,9 +178,6 @@ function userInput() {
 	console.log('Coordinates of previous missile attempts:');
 	console.log(playerFired);
 
-	console.log('computer grid below:')										// REMOVE WHEN MOVING TO PRODUCTION //
-	console.log(computer);
-
 	prompt.start();
 	console.log('Select the coordinates you would like to fire at, (A-J & 1-10, e.g. F8)');
 	prompt.get(['coordinates'], function (err, result) {
@@ -199,7 +185,7 @@ function userInput() {
 		var xAxis = result.coordinates[0];
 
 		if (result.coordinates[2] !== undefined) {									// Required for naming purposes in Command Line interface
-			var combine = ('' + result.coordinates[1] + result.coordinates[2]);		// EDGE CASE - if a double digit coordinate is entered, e.g. B10
+			var combine = ('' + result.coordinates[1] + result.coordinates[2]);		// Addressing Edge Case - if a double digit coordinate is entered, e.g. B10
 			var yAxis = parseInt(combine);
 		} else {
 			var yAxis = parseInt(result.coordinates[1]);
@@ -248,7 +234,6 @@ function updateComputerGrid(xAxis, yAxis) {
 	computer[xAxis][yAxis] = '-';
 }
 
-
 //////////////////////////////  Component 4: Computer Missile Firing  /////////////////////////////////////// 
 
 function computerFireMissile() {
@@ -259,7 +244,7 @@ function computerFireMissile() {
 	console.log('--------------------------------------');
 	console.log('Captain, enemy missile fired!');
 
-	if (computerFired[xAxis][yAxis] === 'F') {							// If a missile has already been fired at this coordinate, retarget
+	if (computerFired[xAxis][yAxis] === 'F') {							// If a missile has already been fired at this coordinate, then retarget by recalling function
 		computerFireMissile();
 
 	} else if (player[xAxis][yAxis] === "") {
@@ -277,7 +262,44 @@ function computerFireMissile() {
 }
 
 
-///////////////// Component 5: SUPPORT FUNCTIONS //////////////////
+
+
+//////////////////// Component 5: DETERMINING WINNER  //////////////////////////////////
+
+var playerShotsFired = 0;				
+var playerShotsHit = 0;
+var computerShotsFired = 0;
+var computerShotsHit = 0;
+
+
+function checkWinner(entity) {
+	var checkGrid = (entity === 'player' ? 'computer' : 'player');			// ternary opearator to determine which grid to check against clean grid
+
+	if (JSON.stringify(eval(checkGrid)) === JSON.stringify(cleanGrid)) {
+		console.log('--------------------------------------');
+		console.log(entity + ' wins!');
+		gameStatistics();
+	} else {
+		if (entity === 'player') {
+			userInput();
+		} else if (entity === 'computer') {
+			computerFireMissile();
+		}
+	}
+}
+
+function gameStatistics() {
+	var playerAccuracy = Math.round((playerShotsHit / playerShotsFired)*100);
+	var computerAccuracy = Math.round((computerShotsHit / computerShotsFired)*100);
+
+	console.log('Game Statistics:');
+	console.log('No. of Missiles you fired: ' + playerShotsFired + ', Accuracy: ' + playerAccuracy + '%');
+	console.log('No. of Missiles the enemy fired: ' + computerShotsFired + ', Accuracy: ' + computerAccuracy + '%');
+}
+
+
+
+///////////////// Component 6: SUPPORT FUNCTIONS //////////////////
 
 function randomShortNumber() {
 	var randomNumber = Math.round((Math.random() * 5) + 1);	
@@ -320,7 +342,7 @@ function convertLetterToInteger(input) {					// convert letter(A-J) to number(0-
 
 
 
-////////////////////////// CALLING THE GAME START //////////////////////
+////////////////////////// Component 7. CALLING THE GAME START //////////////////////
 
 function startGame() {
 	setGrid(computer);
